@@ -27,16 +27,35 @@
 //find( )  
 //filter( )
 
+//BOK-APP
+//Array som lagrar böcker
+const bibliotek = [];
+
+//Funktion: att lägga till böcker
+function läggtillBok() {
+    //Titel
+    const titel = prompt("Ange bokens titel: ");
+
+    //Författare
+    const författare = prompt("Ange bokens författare: ");
+
+    //Skapa bokobjekt
+    const bok = {
+        titel: titel,
+        författare: författare,
+        ärLäst: sant
+    };
+
+    //Lägg till bok i biblioteket
+    bibliotek.push(bok);
+    alert(`Boken "${titel}" av ${författare} har lagts till i ditt bibliotek.`);
+}
+    
 
 
 
 
-
-
-
-
-
-// Meny
+// Meny Ifyllt av läraren jag har ändrat till svenska alternativ.
 while (running) {
     const choice = prompt(`
        Book Tracker
@@ -48,16 +67,16 @@ while (running) {
 
     switch (choice) {
         case "1":
-            addBook();
+            läggtillBok();
             break;
 
         case "2":
-            listBooks();
+            listaBöcker();
             break;
 
         case "3":
-            const title = prompt("Enter the title of the book to mark as read: ");
-            markAsRead(title);
+            const title = prompt("Ange titeln på boken du vill markera som läst: ");
+            markerasomLäst(title);
             break;
 
         case "4":
