@@ -27,65 +27,140 @@
 //find( )  
 //filter( )
 
-//BOK-APP
-//Array som lagrar böcker
-const bibliotek = [];
+//----------APP som loggar böcker "bibliotek"--------------
 
-//Funktion: att lägga till böcker
-function läggtillBok() {
-    //Titel
-    const titel = prompt("Ange bokens titel: ");
+//----Array som lagrar alla bokobjekt----
+const library = [];
 
-    //Författare
-    const författare = prompt("Ange bokens författare: ");
+//----Funktion som lägger till en ny bok i biblioteket----
+function addBook() {
+  const title = prompt("Enter book title:");
+    if (!title) {
+    alert("Title cannot be empty.");
+    return;
+  }
 
-    //Skapa bokobjekt
-    const bok = {
-        titel: titel,
-        författare: författare,
-        ärLäst: sant
-    };
+  const author = prompt("Enter book author:");
+    if (!author) {
+    alert("Author cannot be empty.");
+    return;
+  }
 
-    //Lägg till bok i biblioteket
-    bibliotek.push(bok);
-    alert(`Boken "${titel}" av ${författare} har lagts till i ditt bibliotek.`);
+//----Frågar om boken är läst och omvandlar svaret till boolean----
+  const readAnswer = prompt("Have you read this book? (yes/no)").toLowerCase();
+  const isRead = readAnswer === "yes";
+
+//----"ett bokobjekt"----
+  const book = {
+    title: title,
+    author: author,
+    isRead: isRead,
+  };
+
+//----Lägger till boken i arrayen library----
+  library.push(book);
+  alert(`"${title}" by ${author} has been added to your library.`);
 }
-    
 
+//----Funktion som listar alla böcker i biblioteket----
+function listBooks() {
+//----Kontrollerar om biblioteket är tomt----
+    if (library.length === 0) {
+    console.log("No books in the library yet.");
+    alert("No books to display (check console).");
+    return;
+  }
 
+  console.log("=== Book List ===");
 
+//----Loopar igenom alla böcker med forEach----
+  library.forEach((book, index) => {
+    const status = book.isRead ? "READ" : "NOT READ";
+    console.log(`${index + 1}. "${book.title}" by ${book.author} [${status}]`);
+  });
 
-// Meny Ifyllt av läraren jag har ändrat till svenska alternativ.
+    alert("Book list printed in console.");
+}
+
+//----Funktion som markerar en bok som läst baserat på titel----
+function markAsRead(title) {
+
+//----Hittar första boken som matchar titeln----
+  const book = library.find(
+    (b) => b.title.toLowerCase() === title.toLowerCase()
+  );
+
+//----Om ingen bok hittas----
+  if (!book) {
+    alert(`Book titled "${title}" was not found.`);
+    return;
+  }
+
+//----Markerar boken som läst----
+  book.isRead = true;
+    alert(`"${book.title}" is now marked as read.`);
+}
+
+//---- (Valfri) Funktion som använder filter() för att visa olästa böcker----
+function listUnreadBooks() {
+
+//----Skapar en ny array med endast olästa böcker----
+  const unreadBooks = library.filter((book) => !book.isRead);
+
+    if (unreadBooks.length === 0) {
+    console.log("No unread books 🎉");
+    alert("No unread books!");
+    return;
+  }
+
+  console.log("=== Unread Books ===");
+
+  unreadBooks.forEach((book) => {
+    console.log(`"${book.title}" by ${book.author}`);
+  });
+
+  alert("Unread books printed in console.");
+}
+
+//----Variabel som styr om programmet ska fortsätta köras----
+let running = true;
+
+//----Meny som körs tills användaren väljer att avsluta----
 while (running) {
-    const choice = prompt(`
-       Book Tracker
-         1. Lägg till bok
-            2. Lista böcker
-            3. Markera bok som läst
-            4. Avsluta
-         Ange ditt val: `);
+  const choice = prompt(`
+Book Tracker
+1. Add book
+2. List books
+3. Mark book as read
+4. List unread books
+5. Exit
+Enter your choice:`);
 
-    switch (choice) {
-        case "1":
-            läggtillBok();
-            break;
+  switch (choice) {
+    case "1":
+      addBook();
+      break;
 
-        case "2":
-            listaBöcker();
-            break;
+    case "2":
+      listBooks();
+      break;
 
-        case "3":
-            const title = prompt("Ange titeln på boken du vill markera som läst: ");
-            markerasomLäst(title);
-            break;
+    case "3": {
+      const title = prompt("Enter the title of the book to mark as read:");
+      if (title) markAsRead(title);
+      break;
+    }
 
-        case "4":
-            running = false;
-            alert("Hejdå!");
-            break;
+    case "4":
+      listUnreadBooks();
+      break;
 
-        default:
-            alert(
-                "Ogiltigt val. Försök igen."); 
-      }
+    case "5":
+      running = false;
+      alert("Goodbye!");
+      break;
+
+    default:
+      alert("Invalid choice. Please try again.");
+  }
 }
